@@ -1,0 +1,263 @@
+﻿@page "/customerOrder"
+
+<style>
+	
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* Firefox */
+	input[type=number] {
+		-moz-appearance: textfield;
+	}
+</style>
+
+
+
+<div class="pace-top">
+	<!-- BEGIN #app -->
+	<div id="app" class="app app-content-full-height app-without-sidebar app-without-header">
+		<!-- BEGIN #content -->
+		<div id="content" class="app-content p-1 ps-xl-4 pe-xl-4 pt-xl-3 pb-xl-3">
+			<!-- BEGIN pos -->
+			<div class="pos card" id="pos">
+				<div class="pos-container card-body">
+					
+					<div class="pos-content">
+						<div class="pos-content-container h-100 p-4" data-scrollbar="true" data-height="100%">
+							@* search Input start *@
+							<div style="position:relative">
+
+								<input @bind="@searchTerm" @oninput="HandleSearchInput" class="form-control form-control-lg" type="text" placeholder="Search Product">
+
+								<div class="product-list">
+
+									@foreach (var product in filteredProducts)
+									{
+										<div tabindex="0" class="product  " @onclick="() => AddToCart(product)" @onkeydown="@(e => HandleAddToCart(e, product))">
+											<div class="row">
+												<p class="col-3 fs-16px m-0">@product.Name</p>
+												<p class="col-3 fs-16px m-0">@product.Sku</p>
+												<p class="col-3 fs-16px m-0">$@product.UnitPrice</p>
+												<p class="col-3 fs-16px m-0">@product.AvailableStock Units</p>
+											</div>
+										</div>
+									}
+								</div>
+							</div>
+							@* search input end *@
+							@* customer information start *@
+							@if(selectedCustomer != null)
+							{
+								<div class="card-group mt-3">
+									<div class="card me-1">
+										<div class="card-header fw-bold small">Bill To</div>
+										<div class="card-body">
+											<p class="m-0">Name: @selectedCustomer.CustomerName</p>
+											<p class="m-0">Email: @selectedCustomer.Email</p>
+											<p class="m-0">Phone:  @selectedCustomer.Phone</p>
+											<p class="m-0">Street:  @selectedCustomer.Address</p>
+											<p class="m-0">Address: @selectedCustomer.City, @selectedCustomer.PostalCode</p>
+										</div>
+
+										<!-- arrow -->
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+									</div>
+									<div class="card ms-1 me-1">
+										<div class="card-header fw-bold small">Ship To</div>
+										<div class="card-body">
+											<p class="m-0">Name: @selectedCustomer.CustomerName</p>
+											<p class="m-0">Email: @selectedCustomer.Email</p>
+											<p class="m-0">Phone:  @selectedCustomer.Phone</p>
+											<p class="m-0">Street:  @selectedCustomer.Address</p>
+											<p class="m-0">Address: @selectedCustomer.City, @selectedCustomer.PostalCode</p>
+										</div>
+
+										<!-- arrow -->
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+									</div>
+									<div class="card ms-1">
+										<div class="card-header fw-bold small">Shipping Information</div>
+										<div class="card-body">
+											<p class="m-0">Carrier:</p>
+											<p class="m-0">Service:</p>
+											<p class="m-0">Charge:</p>
+											<p class="m-0">Tracking:</p>
+											<p class="m-0">Notes:</p>
+
+										</div>
+
+										<!-- arrow -->
+										<div class="card-arrow">
+											<div class="card-arrow-top-left"></div>
+											<div class="card-arrow-top-right"></div>
+											<div class="card-arrow-bottom-left"></div>
+											<div class="card-arrow-bottom-right"></div>
+										</div>
+									</div>
+								</div>
+
+							}
+							
+							@* customer information end *@
+							
+							
+
+							@* products table *@
+							<div class="table-responsive">
+								<table class="table mt-3 table-bordered table-hover">
+									<thead>
+										<tr>
+											<th scope="col">Item Code</th>
+											<th scope="col">Name</th>
+											<th scope="col" style="width:100px">Quanity</th>
+											<th scope="col" style="width:150px">Unit Price</th>
+											<th scope="col" style="width:130px">Discount</th>
+											<th scope="col" style="width:170px">Total Price</th>
+											<th scope="col" style="width:100px">Tax</th>
+											<th scope="col" style="width:100px">Action</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										@foreach (var cartProduct in cartProducts)
+										{
+											<ProductLineItem OnChangeCartItem="UpdateCartProduct" cartProduct="cartProduct" OnRemoveCartProduct="RemoveCartProduct" />
+
+										}
+
+									</tbody>
+								</table>
+
+							</div>
+							
+
+						</div>
+					</div>
+					<!-- END pos-content -->
+					<!-- BEGIN pos-sidebar -->
+					<div class="pos-sidebar" id="pos-sidebar">
+						<div class="h-100 d-flex flex-column p-0">
+							
+							
+							<OrderTotals SubTotalPrice="@subTotal" TaxPrice="@taxPrice" />
+							<!-- END pos-sidebar-footer -->
+
+							@* More action buttons *@
+							<div class="more-action-btns" style="" >
+								<div class="d-flex justify-content-between" style="width:108%">
+									<button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#customerModal" class="btn btn-outline-secondary w-170px fs-20px">Customer</button>
+									<button type="button" tabindex="-1" class="btn btn-outline-secondary w-170px fs-20px">Open/Close</button>
+								</div>
+								<div class="d-flex justify-content-between mt-3" style="width:108%">
+									<button type="button" tabindex="-1" class="btn btn-outline-secondary w-170px fs-20px">Time Clock</button>
+									<button type="button" tabindex="-1" class="btn btn-outline-secondary w-170px fs-20px">Ship To</button>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<!-- END pos-sidebar -->
+				</div>
+				<div class="card-arrow">
+					<div class="card-arrow-top-left"></div>
+					<div class="card-arrow-top-right"></div>
+					<div class="card-arrow-bottom-left"></div>
+					<div class="card-arrow-bottom-right"></div>
+				</div>
+			</div>
+			<!-- END pos -->
+			
+			<!-- END pos-mobile-sidebar-toggler -->
+		</div>
+		
+		<!-- BEGIN btn-scroll-top -->
+		<a href="#" data-toggle="scroll-to-top" class="btn-scroll-top fade"><i class="fa fa-arrow-up"></i></a>
+		<!-- END btn-scroll-top -->
+	</div>
+	<!-- END #app -->
+	
+	@* Start #checkOutModal *@
+
+	<div class="modal" id="checkOutModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Proceed to payment</h5>
+				</div>
+				<div class="modal-body">
+					<p class="h5">Select payment method</p>
+					<hr>
+					<div class="d-flex align-items-center mb-2">
+						<div class="fs-15px">Subtotal</div>
+						<div class="flex-1 text-end h5 mb-0">$@subTotal</div>
+					</div>
+					<div class="d-flex align-items-center">
+						<div class="fs-15px">Taxes (6%)</div>
+						<div class="flex-1 text-end h5 mb-0">$@taxPrice</div>
+					</div>
+					<hr>
+					<div class="d-flex align-items-center mb-2">
+						<div class="fs-17px">Total</div>
+						<div class="flex-1 text-end h4 mb-0">$@totalPrice</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-outline-theme">Save changes</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	@* End #checkOutModal *@
+	
+
+	@* Start Customer Modal*@
+	<div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="customerModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Select Customer</h5>
+				</div>
+				<div class="modal-body">
+					<div style="position:relative">
+						<input @bind="@searchCustomer"   @onfocus="() => GetAllCustomers()" @oninput="HandleCustomerSearchInput" class="form-control form-control-lg" type="text" placeholder="Search Customer">
+						@if (isShownCustomerList)
+						{
+							<div class="customer-list">
+
+								@foreach (var customer in filteredCustomers)
+								{
+									<div class="customer " tabindex="0" @onclick="() => ChangeCustomer(customer)">
+										<div>
+											<p class=" fs-16px m-0">@customer.CustomerName</p>
+										</div>
+									</div>
+								}
+							</div>
+						}
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<script src="assets/js/demo/pos-customer-order.demo.js"></script>

@@ -1,0 +1,35 @@
+﻿
+
+
+<div class="pos-order" id="cartProduct_@cartProduct.ProductId">
+	<div class="pos-order-product">
+		<div class="img" style="background-image: url(assets/img/pos/product-2.jpg)"></div>
+		<div class="flex-1">
+			<div class="fs-15px mb-1" style="font-weight:bold">@cartProduct.Name</div>
+			<div class="fs-14px">$@cartProduct.UnitPrice</div>
+			<div class="fs-14px mb-2">Sku | @cartProduct.Sku</div>
+			<div class="d-flex">
+				<a @onclick="() => ReduceQuantity()" class="btn btn-outline-theme btn-sm"><i class="fa fa-minus"></i></a>
+				<input @onchange="HandleQuantityInput" value="@cartProduct.Quantity" min="1" type="number" class="form-control w-50px form-control-sm mx-2 bg-white bg-opacity-25 text-center">
+				<a @onclick="() => IncreaseQuantity()"class="btn btn-outline-theme btn-sm"><i class="fa fa-plus"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="pos-order-price">
+		<p class="fs-15px">$@(cartProduct.UnitPrice * cartProduct.Quantity)</p>
+		<i @onclick="ShowConfirmation" class="fa fa-trash btn-outline-danger" style="padding: 5px;font-size: 22px;border-radius:3px;"></i>
+	</div>
+	<div style="@confirmationStyle">
+		<div class="pos-order-confirmation text-center d-flex flex-column justify-content-center">
+			<div class="mb-1">
+				<i class="bi bi-trash fs-36px lh-1"></i>
+			</div>
+			<div class="mb-2">Remove this item?</div>
+			<div>
+				<a @onclick="() => RemoveProduct(false)" class="btn btn-outline-default btn-sm ms-auto me-2 width-100px">No</a>
+				<a @onclick="() => RemoveProduct(true)"  class="btn btn-outline-theme btn-sm width-100px">Yes</a>
+			</div>
+		</div>
+	</div>
+	
+</div>

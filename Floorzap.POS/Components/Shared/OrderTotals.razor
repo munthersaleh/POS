@@ -1,0 +1,34 @@
+﻿<style>
+	.chk-out {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center; 
+	}
+</style>
+
+<div class="pos-sidebar-footer">
+	<div class="d-flex align-items-center mb-2">
+		<div class="fs-15px">Subtotal</div>
+		<div class="flex-1 text-end h4 mb-0">$@SubTotalPrice</div>
+	</div>
+	<div class="d-flex align-items-center">
+		<div class="fs-15px">Taxes (6%)</div>
+		<div class="flex-1 text-end h4 mb-0">$@TaxPrice</div>
+	</div>
+	<hr>
+	<div class="d-flex align-items-center mb-2">
+		<div class="fs-17px">Total</div>
+		<div class="flex-1 text-end h3 mb-0">$@TotalPrice</div>
+	</div>
+	<div class="mt-4">
+		<div class="d-flex justify-content-center">
+			<button tabindex="0" class="btn btn-theme rounded-3 chk-out" data-bs-toggle="modal" data-bs-target="#checkOutModal" style="width:200px">
+				<i class="fa fa-shopping-cart fa-lg"></i><br>
+				<span style="font-size:20px;padding-left:10px" >Check Out</span>
+			</button>
+		
+		</div>
+	</div>
+</div>
+
