@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 using POSModel.Models;
 using POSServices.Services.Products;
 using System;
@@ -14,114 +15,61 @@ namespace Floorzap.POS.Components.Shared
 {
     public partial class InventoryProducts
     {
-        List<Product> allProducts = new List<Product>();
-        List<Product> filteredProducts = new List<Product>();
-
-
-		private int currentPage = 1;
-		private int pageSize = 15; // Default page size
-		private int totalPages = 0;
-
-		int totalProducts = 0;
-
 		[Parameter]
-		public EventCallback<List<Product>> OnAddProducts { get; set; }
+		public EventCallback<HashSet<Product>> OnAddProducts { get; set; }
 
 		[Parameter]
 		public bool IsInventory { get; set; }
 		[Inject]
         IProductService productService { get; set; }
-        [Inject]
-        IJSRuntime JSRuntime { get; set; }
-        protected override async Task OnInitializedAsync()
-        {
-			allProducts = await productService.GetAllInventoryProducts();
-			//await LoadProducts();
-		}
-		private HashSet<int> selectedProductIds = new HashSet<int>(); 
 
-		private void ToggleSelection(int productId)
-		{
-			if (selectedProductIds.Contains(productId))
-			{
-				selectedProductIds.Remove(productId);
-			}
-			else
-			{
-				selectedProductIds.Add(productId);
-			}
-		}
+
+		private HashSet<Product> selectedItems = new HashSet<Product>();
+
+		private MudTable<Product> table;
+
+		private int totalItems;
+		private string searchString = null;
 
 		private async Task AddSelectedProducts()
 		{
-			var selectedProductIdss = await JSRuntime.InvokeAsync<List<int>>("getSelectedProductIds");
-			var selectedProducts = allProducts.Where(p => selectedProductIdss.Contains(p.ProductID)).ToList();
-			OnAddProducts.InvokeAsync(selectedProducts);
-        }
-
-		private async Task ChangePage(int newPage)
-		{
-			if (newPage < 1) return;
-			currentPage = newPage;
-			await LoadProducts();
+			await OnAddProducts.InvokeAsync(selectedItems);
 		}
 
-		private async Task LoadProducts()
+		private async Task<TableData<Product>> ServerReload(TableState state, CancellationToken token)
 		{
-			if (IsInventory)
+			InventoryProductFilterModel filterModel = new InventoryProductFilterModel
 			{
-				InventoryProductFilterModel inventoryProductFilterModel = new InventoryProductFilterModel()
+				Association = false,
+				FilterByProductName = searchString ?? "",
+				PageType = 0,
+				PaginationModel = new PaginationModel
 				{
-					Association = false,
-					FilterByColor = "",
-					FilterByProductName = "",
-					FilterBySKU = "",
-					FilterByStyle = "",
-					IsStock = -1,
-					PageType = 0,
-					PaginationModel = new PaginationModel()
-					{
-						Skip = currentPage * pageSize,
-						Take = pageSize,
-						PageSize = pageSize,
-						Page = currentPage
-					},
-					ServiceTypeID = 1231
-				};
-				allProducts = await productService.GetAllProductsServerPaginated(inventoryProductFilterModel);
-				totalProducts = allProducts.FirstOrDefault().TotalCount;
-				totalPages = totalProducts / pageSize;
-			}
-			else
+					Skip = state.Page * state.PageSize,
+					Take = state.PageSize,
+					PageSize = state.PageSize,
+					Page = state.Page
+				},
+				ServiceTypeID = 1231
+			};
+			filterModel.IsStock = IsInventory ? 1 : 0;
+
+			List<Product> filteredProducts = await productService.GetAllProductsServerPaginated(filterModel);
+			totalItems = filteredProducts.Any() ? filteredProducts.FirstOrDefault().TotalCount : 0;
+
+			return new TableData<Product>
 			{
-				allProducts = await productService.GetAllNonInventoryProducts();
-			}
+				TotalItems = totalItems,
+				Items = filteredProducts
+			};
 		}
 
-		//[JSInvokable]
-		//public static Task OnCheckboxChanged(int productId, bool isChecked)
-		//{
-		//    // Handle the checkbox change
-		//    // This example assumes that you have a way to manage the component's instance or state
-		//    if (isChecked)
-		//    {
-		//        // Logic for adding productId to selectedProductIds
-		//    }
-		//    else
-		//    {
-		//        // Logic for removing productId from selectedProductIds
-		//    }
-		//    return Task.CompletedTask;
-		//}
-
-		//protected override async Task OnAfterRenderAsync(bool firstRender)
-		//{
-		//    if (firstRender)
-		//    {
-		//        await JSRuntime.InvokeVoidAsync("setupTableCheckboxes");
-		//    }
-		//}
-
+		private void OnSearch(string text)
+		{
+			searchString = text;
+			table.ReloadServerData();
+		}
+		
 
 	}
 }

@@ -205,7 +205,7 @@ namespace Floorzap.POS.Components.Pages
             }
         }
 
-        private async Task AddCartsItems(List<Product> products)
+        private async Task AddCartsItems(HashSet<Product> products)
         {
 			var newCartProducts = products.Select(pro => MapToCartProduct(pro)).ToList();
 
@@ -227,10 +227,10 @@ namespace Floorzap.POS.Components.Pages
 			return new CartProduct
 			{
 				ProductId = product.ProductID,
-				Name = product.ActualProductName,
+				Name = product.ProductName,
 				Sku = product.SKU,
 				Quantity = 1,
-				UnitPrice = product.RegularPrice,
+				UnitPrice = product.UnitCost,
 				ItemCode = product.SKU,
 				IsSaleTax = true,
                 IsStock = product.IsStock

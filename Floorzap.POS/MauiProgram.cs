@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using MudBlazor.Services;
 using POSServices.HttpApiManager;
 using POSServices.Services.Authentication;
 using POSServices.Services.Customers;
 using POSServices.Services.Products;
-using Radzen;
 
 namespace Floorzap.POS
 {
@@ -20,10 +20,11 @@ namespace Floorzap.POS
                 });
 
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddRadzenComponents();
 			builder.Services.AddHttpClient();
+            builder.Services.AddMudServices();
 
-			builder.Services.AddSingleton<IApiManager, ApiManager>();
+
+            builder.Services.AddSingleton<IApiManager, ApiManager>();
 			builder.Services.AddTransient<IProductService, ProductService>();
 			builder.Services.AddTransient<ICustomerService, CustomerService>();
 			builder.Services.AddTransient<IAccountService, AccountService>();

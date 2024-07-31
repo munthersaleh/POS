@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="Floorzap.POS.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
 
-    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
-
+    <!--Mud blazor-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 
     <!-- ================== BEGIN core-css ================== -->
     <link href="assets/css/vendor.min.css" rel="stylesheet">
@@ -24,7 +25,7 @@
     <link href="assets/plugins/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
 
 
-          
+
 </head>
 
 <body>
@@ -47,27 +48,7 @@
                 element.focus();
             }
         }
-        //var selectedProductIds = [];
-        //function setupTableCheckboxes() {
-        //    debugger;
-        //    $(".product-checkbox").on("change", function () {
-        //        $(".product-checkbox").each(function (index, elem) {
-        //            if ($(elem).is(':checked')) {
-        //                console.log("check");
-        //            } else {
-        //                console.log("check");
-        //            }
-        //        });
-        //    });
-        //    //document.querySelectorAll('.product-checkbox').forEach(checkbox => {
-        //    //    checkbox.addEventListener('change', function () {
-        //    //        debugger;
-        //    //        const productId = parseInt(this.getAttribute('data-product-id'), 10);
-        //    //        const isChecked = this.checked;
-        //    //        if (isChecked && !isNaN(productId)) selectedProductIds.push(productId);
-        //    //    });
-        //    //});
-        //};
+
         function getSelectedProductIds() {
             // get all checkboxes with the class 'product-checkbox'
             const checkboxes = document.querySelectorAll('.product-checkbox');
@@ -87,41 +68,14 @@
             });
             return selectedids;
         }
-        //function customAjax(params) {
-        //    debugger;
-        //    $.ajax({
-        //        url: `http://localhost/api/materialLabor/GetAllProductsServerPaginatedForPos?offset=${1}&limit=${20}&search=${"s"}&sort=${"s"}&sortOrder=${true}`,
-        //        type: 'GET', // Use 'POST' if necessary, depending on your API
-        //        headers: {
-        //            'Content-Type': 'application/json',
-        //            'Cookies': 'ASP.NET_SessionId=xakp1ua20y5oeo4yku5m5f1y; timezone=Central+Standard+Time; FloorzapAuthCookie=YtepOYPxvTQdNEjsOKF0dgarnYEM0j7GLfJFXysgAw_M28NHL1lx4O3rta0EmuCOGws7d7sUVrC8asIYakxwxhi3foNGhecl45EotZRFQnq04FNAB0j2MLPqMQzeXiSziNRX1G0yVsSbRQhChEPCZ_wJVW-hsD5MGi9gqXXyTaRaiiutsrGCltXM9FFUMx44JKhoU_uomnx-lQ0kvo7eKeSwiO-R5C6XocK3F2O39LXiwbOFQbLi035pZttanqauiCIkRzT7ljnIqqG4a7koj6Q23QG7hkULFxOnDLRsC5OGFo4Fpu4aIN2Xq6AImkLttHSQ6FORjW-WJiXHE1k3GxlTDswaWCTs9tOKti4cT9DGXzrgotQ6v3hbDLlkqppe1na20EOsWKzgxHuGSsJTA16ajFtTCSaq0qO16mfc2uO855sBs5rquliuFfMod3b5wZDsAsaG3oPWCGPeDrAMYjwJZ9ZC2x7B9Rf8sDOJxUUxpYUdZSDtiF7IC104yZSAK7pout7I-NbThlncJlgoYg'
-        //            // Add any custom headers here
-        //        },
-        //        beforeSend: function (xhr) {
-        //            xhr.setRequestHeader('Custom-Header', 'Value'); // Example for custom headers
-        //            // Add other necessary actions before sending request
-        //        },
-               
-        //        success: function (data) {
-        //            debugger;
-        //            console.log("pas");
-        //            // Pass the data to the table
-        //            $('#productsTable').bootstrapTable('load', data);
-        //        },
-        //        error: function (xhr, status, error) {
-        //            console.log("fail");
-        //            console.log(error);
-        //            console.log(status);
-        //            console.error('AJAX Error: ', status, error);
-        //        }
-        //    });
-        //}
 
-       
+
     </script>
 
     <script src="_framework/blazor.webview.js" autostart="false"></script>
-    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+
+    <!--mud blazor-->
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 
     <!-- ================== BEGIN core-js ================== -->
     <script src="assets/js/vendor.min.js"></script>

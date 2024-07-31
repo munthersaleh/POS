@@ -6,7 +6,7 @@
             <div style="width:80%;background-color:white;">
                 <input class="form-control" type="number"
                        @onchange="HandleUnitPriceInput"
-                       value="@cartProduct.UnitPrice" style="font-weight:600" placeholder="0">
+                       value="@cartProduct.UnitPrice.ToString("0.##")" style="font-weight:600" placeholder="0">
             </div>
         </div>
         <div style="flex:1;">
@@ -25,7 +25,8 @@
         <div style="flex:1;">
             <input type="checkbox" @onchange="HandleSalesTaxInput" checked value="@cartProduct.IsSaleTax">
         </div>
-        <p style="flex:1;">$@((cartProduct.UnitPrice * cartProduct.Quantity) - cartProduct.Discount)</p>
+        <p style="flex:1;">$@((cartProduct.UnitPrice * cartProduct.Quantity - cartProduct.Discount).ToString("0.##"))</p>
+
     </div>
     <div style="position:absolute; top: 50%;
                 right:7px;
