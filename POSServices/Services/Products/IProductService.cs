@@ -8,6 +8,12 @@ namespace POSServices.Services.Products
 {
 	public interface IProductService
 	{
-		Task<List<Product>> GetAllProducts();
+		Task<List<Product>> GetAllInventoryProducts();
+
+        Task<List<Product>> GetAllNonInventoryProducts();
+
+		Task<List<Product>> GetAllProductsServerPaginated(InventoryProductFilterModel inventoryProductFilterModel);
+
+
 	}
 }

@@ -9,6 +9,7 @@ namespace POSServices.Services.Customers
 {
 	public interface ICustomerService
 	{
-		Task<List<Customer>> GetAllCustomers();
+		Task<List<CustomerInfo>> GetAllCustomers();
+		Task<CustomerAddress> GetDefaultAddressByCustomerID(int customerId);
 	}
 }

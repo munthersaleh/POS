@@ -1,0 +1,358 @@
+@page "/productOrder"
+<style>
+    .round-card{
+        border-radius:35px;
+        background-color:white;
+    }
+    .product-card{
+    border-radius:20px;
+    background-color:#f4f4f4;
+     }
+
+    p{
+        margin:0px;
+    }
+
+    .bg-gray{
+        background-color:#f4f4f4
+    }
+    .discount-btn{
+        font-size: 16px;
+        width:100%;
+        font-weight:600;
+        border-radius:25px;
+        height:100%;
+        background-color:#00df81;
+        color:black;
+        border:none;
+    }
+   .selected-payment{
+        border: 2px solid #00df81;
+        border-radius: 25px;
+   }
+
+    .unselected-payment {
+        border: 2px solid #f2f2f2;
+        border-radius: 25px;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+</style>
+
+<div class="container-fluid vh-100 p-3 bg-gray px-xl-5 " >
+
+    @*header*@
+
+    <div>
+        <div class="d-flex justify-content-between">
+            <div>
+                 <div class="d-flex py-3 px-4 round-card text-black" style="font-weight:600">
+                    <i class="fa-solid fa-arrow-left pt-1"></i>
+                    <p class="ps-2">Menu</p>
+                </div>
+            </div>
+           
+            <div>
+                <p style="font-size:36px;color:#dedddd">ZaPOS</p>
+            </div>
+            <div>
+                 <div class="d-flex py-3 px-4 round-card  text-black" style="font-weight:600">
+                     <p class="pe-1">Sale Rep</p>
+                     <i class="fa-solid fa-gear pt-1"></i>
+                 </div>
+            </div>
+           
+
+        </div>
+    </div>
+
+    @*body content*@
+    <div class="p-1 mt-4  bg-gray">
+        <div class="row">
+            <div class="col-8" >
+                 @*customer info*@
+                 <div class="d-flex">
+                    @if (selectedCustomer != null )
+                    {
+                        <div class="d-flex flex-grow-1 justify-content-between round-card py-3 px-4 me-2 text-black fs-16px" style="font-weight:500;">
+                            <div class="d-flex ">
+                                <p>@selectedCustomer.FullName</p>
+                            </div>
+                                @* <div class="d-flex align-items-center">
+                                    <i class="pe-1 fas fa-phone-volume"></i>
+                                    <p>@customerAddress.FullAddress</p>
+                                </div> *@
+                                <div class="d-flex align-items-center">
+                                    <i class="pe-1 fa-solid fa-house"></i>
+                                <p>@customerAddress.FullAddress</p>
+
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="pe-1 fa-regular fa-user"></i>
+                                    <p>Cust Type</p>
+                                </div>
+                        </div>
+                   
+                        <div class="round-card d-flex justify-content-center align-items-center" style="width:60px; ">
+                            <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#customerModal" class="btn fs-20px" style="background-color:white;border:none">
+                                <i class="fa-regular fa-user fs-22px"></i>
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex-grow-1">
+                            </div>
+                        <div class="round-card d-flex justify-content-center align-items-center">
+                            <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#customerModal" class=" round-card btn fs-16px" style="background-color:white;border:none">
+                                <i class="fa-regular fa-user me-1"></i><span>Customer</span>
+                            </button>
+                        </div>
+                    }
+
+                 </div>
+               
+
+                @*Order products*@
+
+                <div class="round-card mt-3 py-3 px-4" style="min-height:475px;">
+                    <div class="d-flex justify-content-between">
+                        <p style="font-size:28px;font-weight:600">Order details</p>
+
+                        <div class="d-flex fs-20px">
+                            <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#inventoryProductsModal" class="py-1 pe-2 ps-3" style="background-color:#f5a135;border-radius:15px 0 0 15px;padding-right:4px;border:none"> <i class="fa-solid fa-cubes"></i></button>
+                            @* <div class="py-1 pe-2 ps-3" style="background-color:#f5a135;border-radius:15px 0 0 15px;padding-right:4px;">
+                              <i class="fa-solid fa-cubes"></i>
+                            </div> *@
+                            <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#nonInventoryProductsModal" class="py-1 ps-2 pe-3" style="background-color:#4bdba0;border-radius:0px 15px 15px 0px;padding-left:4px;border:none"> <i class="fa-solid fa-qrcode"></i></button>
+                             @* <div class="py-1 ps-2 pe-3" style="background-color:#4bdba0;border-radius:0px 15px 15px 0px;padding-left:4px;">
+                                <i class="fa-solid fa-qrcode"></i>
+                             </div> *@
+
+                        </div>
+
+                    </div>
+
+                    @*products table*@
+                    <div class="fs-15px">
+                        <div class="d-flex justify-content-between p-3" style="font-weight:400">
+                          <p style="flex:1;">item#</p>
+                          <p style="flex:2;">Name</p>
+                          <p style="flex:1;">Unit Price</p>
+                          <p style="flex:1;">Discount</p>
+                          <p style="flex:1;">Quantity</p>
+                          <p style="flex:1;">Tax</p>
+                          <p style="flex:1;">Tot. Price</p>
+                      </div>
+                        <div style="max-height:350px;overflow-y: auto !important;">
+                            @foreach (var cartProduct in cartProducts)
+                            {
+                                <CartItem OnChangeCartItem="UpdateCartProduct" cartProduct="cartProduct" OnRemoveCartProduct="RemoveCartProduct" />
+                            }
+
+                      </div>
+                       
+                    </div>
+                </div>
+
+
+                
+                <div class="row mt-3 " style="bottom:0px;">
+                    @*discount card*@
+                    <div class="col-6 ">
+                        <div class="round-card p-4 " style="height:100%">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-gray d-flex justify-content-center align-items-center" style="border-radius:50%;padding:12px;">
+                                    <i class="fa-solid fa-gift fs-20px" style="color:#4bdba0"></i>
+                                </div>
+                                <p class="ps-1 fs-16px text-black" style="font-weight:600">Discount Coupon</p>
+                            </div>
+                            <p class="fs-13px pt-4">
+                                Here apply the offered discount coupons or customer provided coupons
+                                for special discount on current cart value.
+                            </p>
+                            <div class="row pt-3">
+                                <div class="col-8">
+                                    <input style="border-radius:20px;height:50px;font-size:13px" class="form-control form-control-lg" type="text" placeholder="Enter coupen code here..">
+                                </div>
+                                <div class="col-4">
+                                   
+                                    <button type="button" class="btn btn-theme discount-btn" style="">Apply</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 ">
+                        <div class="round-card p-4" style="height:100%">
+                            <ProductOrderTotals SubTotalPrice="@subTotal" TaxPrice="@taxPrice" />
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="round-card p-4 d-flex flex-column justify-content-between" style="height:100%">
+
+                   
+                    <div>
+                         @*billing info*@
+                       <div class="p-3" style="border: 2px solid #f2f2f2;border-radius:25px;">
+                        <div class="row">
+                            <div class="col-3 d-flex justify-content-center align-items-center" >
+                                <i style="color:#00df81" class="fa-solid fa-hand-holding-dollar fs-30px"></i>
+                            </div>
+                             <div class="col-9">
+                                 <p class="fs-18px" style="font-weight:600;margin-left:-5px;">Billing Info</p>
+                                 <div class="py-1">
+                                     	@if(selectedCustomer != null)
+                                        {
+                                            <p>@customerAddress.FullAddress</p>
+                                        }
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*shipping info*@
+                     <div class="p-3 mt-3" style="border: 2px solid #f2f2f2;border-radius:25px;">
+                        <div class="row">
+                            <div class="col-3 d-flex justify-content-center align-items-center" >
+                                <i style="color:#ee8835" class="fa-solid fa-truck-fast fs-30px"></i>
+                            </div>
+                             <div class="col-9">
+                                 <p class="fs-18px" style="font-weight:600;margin-left:-5px;">Shipping Info</p>
+                                 <div class="py-1">
+                                        @if (selectedCustomer != null)
+                                        {
+                                            <p>@customerAddress.FullAddress</p>
+                                        }
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        </div>
+
+                    <div>
+                        @*payment method*@
+                    <p class="text" style="font-size:22px;font-weight:600;margin-top:55px;">Select Payment Method</p>
+                        <div class="p-3 mt-2 @cashPayment" @onclick="() => ChangePaymentMethod(true)" style="">
+                            <div class="row">
+                                <div class="col-3 d-flex justify-content-center align-items-center" >
+                                    <i style="color:#00df81" class="fa-regular fa-credit-card fs-30px"></i>
+                                </div>
+                                <div class="col-9" style="margin-left:-5px;">
+                                    <p class="fs-18px" style="font-weight:600;">Pay using card</p>
+                                    <div class="pt-1 fs-13px">
+                                        <p>Complete the payment using credit card or debit dard, using swipe machine.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="p-3 mt-3 @cardPayment" @onclick="() => ChangePaymentMethod(false)" style="">
+                            <div class="row">
+                                <div class="col-3 d-flex justify-content-center align-items-center" >
+                                    <i style="color:#00df81" class="fa-solid fa-hand-holding-dollar fs-30px"></i>
+                                </div>
+                                <div class="col-9" style="margin-left:-5px;">
+                                    <p class="fs-18px" style="font-weight:600;">Pay on cash</p>
+                                    <div class="pt-1 fs-13px">
+                                        <p>Complete the payment using credit card or debit dard, using swipe machine.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-theme discount-btn" style="height:65px;font-size:20px">Confirm payment</button>
+
+                    </div>
+                </div>
+                  
+                   
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Inventory Products Modal*@
+    <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="inventoryProductsModal">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Inventory Products</h5>
+                </div>
+                <div class="modal-body" >
+
+                    <InventoryProducts OnAddProducts="AddCartsItems" IsInventory=true />
+                </div>
+               @*  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div> *@
+            </div>
+        </div>
+    </div>
+    @*Non Inventory Products Modal*@
+    <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="nonInventoryProductsModal">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Non Inventory Products</h5>
+                </div>
+                <div class="modal-body">
+
+                    <InventoryProducts OnAddProducts="AddCartsItems" IsInventory=false />
+                </div>
+                @*  <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div> *@
+            </div>
+        </div>
+    </div>
+
+    @* Start Customer Modal*@
+    <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="customerModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Customer</h5>
+                </div>
+                <div class="modal-body">
+                    <div style="position:relative">
+                        <input @bind="@searchCustomer" @onfocus="() => GetAllCustomers()" @oninput="HandleCustomerSearchInput" class="form-control form-control-lg" type="text" placeholder="Search Customer">
+                        @if (isShownCustomerList && filteredCustomers != null)
+                        {
+                            <div class="customer-list">
+
+                                @foreach (var customer in filteredCustomers)
+                                {
+                                    <div class="customer " tabindex="0" @onclick="() => ChangeCustomer(customer)">
+                                        <div>
+                                            <p class=" fs-16px m-0">@customer.FullName</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,4 +1,6 @@
 ﻿using POSModel.Models;
+using POSServices.Helpers;
+using POSServices.HttpApiManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,65 +11,108 @@ namespace POSServices.Services.Products
 {
 	public class ProductService : IProductService
 	{
-		public async Task<List<Product>> GetAllProducts()
+
+		private readonly IApiManager _apiManager;
+
+		public ProductService(IApiManager apiManager)
 		{
-			
-			var random = new Random();
-			
+			_apiManager = apiManager;
+		}
 
-			List<Product> productList = new List<Product>
-	     	{
-			new Product { ProductId = 1, Name = "Gaming Laptop", UnitPrice = 1299.99m, AvailableStock = 50, Sku = "GLP001" },
-			new Product { ProductId = 2, Name = "Smartphone", UnitPrice = 699.99m, AvailableStock = 100, Sku = "SPH002" },
-			new Product { ProductId = 3, Name = "Bluetooth Headphones", UnitPrice = 149.99m, AvailableStock = 150, Sku = "BHP003" },
-			new Product { ProductId = 4, Name = "4K Smart TV", UnitPrice = 899.99m, AvailableStock = 30, Sku = "TV004" },
-			new Product { ProductId = 5, Name = "Fitness Tracker", UnitPrice = 79.99m, AvailableStock = 200, Sku = "FT005" },
-			new Product { ProductId = 6, Name = "External Hard Drive", UnitPrice = 129.99m, AvailableStock = 80, Sku = "EHD006" },
-			new Product { ProductId = 7, Name = "Wireless Keyboard", UnitPrice = 59.99m, AvailableStock = 120, Sku = "WKM007" },
-			new Product { ProductId = 8, Name = "Coffee Maker", UnitPrice = 49.99m, AvailableStock = 180, Sku = "CM008" },
-			new Product { ProductId = 9, Name = "Bluetooth Speaker", UnitPrice = 89.99m, AvailableStock = 90, Sku = "BSP009" },
-			new Product { ProductId = 10, Name = "Electric Toothbrush", UnitPrice = 39.99m, AvailableStock = 150, Sku = "ETB010" },
-			new Product { ProductId = 11, Name = "Air Fryer", UnitPrice = 129.99m, AvailableStock = 60, Sku = "AF011" },
-			new Product { ProductId = 12, Name = "Robot Vacuum", UnitPrice = 299.99m, AvailableStock = 40, Sku = "RVC012" },
-			new Product { ProductId = 13, Name = "Portable Power Bank", UnitPrice = 29.99m, AvailableStock = 250, Sku = "PPB013" },
-			new Product { ProductId = 14, Name = "Monitor Stand", UnitPrice = 49.99m, AvailableStock = 100, Sku = "MS014" },
-			new Product { ProductId = 15, Name = "Wireless Earbuds", UnitPrice = 129.99m, AvailableStock = 70, Sku = "WEB015" },
-			new Product { ProductId = 16, Name = "Backpack", UnitPrice = 79.99m, AvailableStock = 120, Sku = "BP016" },
-			new Product { ProductId = 17, Name = "Smart Watch", UnitPrice = 199.99m, AvailableStock = 80, Sku = "SW017" },
-			new Product { ProductId = 18, Name = "Desktop Computer", UnitPrice = 1499.99m, AvailableStock = 30, Sku = "DC018" },
-			new Product { ProductId = 19, Name = "Portable Bluetooth", UnitPrice = 199.99m, AvailableStock = 50, Sku = "PBP019" },
-			new Product { ProductId = 20, Name = "Electric Scooter", UnitPrice = 399.99m, AvailableStock = 25, Sku = "ES020" },
-			new Product { ProductId = 21, Name = "Smart Thermostat", UnitPrice = 149.99m, AvailableStock = 60, Sku = "ST021" },
-			new Product { ProductId = 22, Name = "UV Sterilizer", UnitPrice = 59.99m, AvailableStock = 100, Sku = "UVS022" },
-			new Product { ProductId = 23, Name = "Wireless Charging Pad", UnitPrice = 34.99m, AvailableStock = 150, Sku = "WCP023" },
-			new Product { ProductId = 24, Name = "Waterproof Bluetooth", UnitPrice = 99.99m, AvailableStock = 70, Sku = "WBSP024" },
-			new Product { ProductId = 25, Name = "Retro Gaming Console", UnitPrice = 179.99m, AvailableStock = 40, Sku = "RGC025" },
-			new Product { ProductId = 26, Name = "Streaming Media Player", UnitPrice = 79.99m, AvailableStock = 90, Sku = "SMP026" },
-			new Product { ProductId = 27, Name = "Digital Photo Frame", UnitPrice = 49.99m, AvailableStock = 120, Sku = "DPF027" },
-			new Product { ProductId = 28, Name = "Electric Kettle", UnitPrice = 29.99m, AvailableStock = 200, Sku = "EK028" },
-			new Product { ProductId = 29, Name = "Smart Door Lock", UnitPrice = 249.99m, AvailableStock = 50, Sku = "SDL029" },
-			new Product { ProductId = 30, Name = "Bluetooth Game", UnitPrice = 69.99m, AvailableStock = 80, Sku = "BGC030" },
-			 new Product { ProductId = 31, Name = "Wireless Router", UnitPrice = 79.99m, AvailableStock = 100, Sku = "WR031" },
-			new Product { ProductId = 32, Name = "Home Security Camera", UnitPrice = 149.99m, AvailableStock = 60, Sku = "HSC032" },
-			new Product { ProductId = 33, Name = "Electric Shaver", UnitPrice = 49.99m, AvailableStock = 120, Sku = "ES033" },
-			new Product { ProductId = 34, Name = "Smart Scale", UnitPrice = 39.99m, AvailableStock = 150, Sku = "SS034" },
-			new Product { ProductId = 35, Name = "Portable Blender", UnitPrice = 29.99m, AvailableStock = 200, Sku = "PB035" },
-			new Product { ProductId = 36, Name = "LED Desk Lamp", UnitPrice = 24.99m, AvailableStock = 250, Sku = "LDL036" },
-			new Product { ProductId = 37, Name = "Cordless Drill", UnitPrice = 99.99m, AvailableStock = 70, Sku = "CD037" },
-			new Product { ProductId = 38, Name = "HDMI Transmitter", UnitPrice = 149.99m, AvailableStock = 90, Sku = "WHT038" },
-			new Product { ProductId = 39, Name = "Smart Plug", UnitPrice = 19.99m, AvailableStock = 120, Sku = "SP039" },
-			new Product { ProductId = 40, Name = "Barcode Scanner", UnitPrice = 89.99m, AvailableStock = 80, Sku = "BBS040" }
-			 };
+		public async Task<List<Product>> GetAllInventoryProducts()
+        {
+            List<Product> productList = await GetAllProducts();
+            int i = 10001;
+            int j = 2;
+            foreach (var product in productList)
+            {
+                product.ProductID = j;
+                product.SKU = i.ToString();
+                product.IsStock = true;
+                i += 2;
+                j += 2;
+            }
 
-			int i = 10001;
-			foreach(var product in productList)
+            return productList;
+        }
+
+        public async Task<List<Product>> GetAllNonInventoryProducts()
+        {
+            List<Product> productList = await GetAllProducts();
+            int i = 10000;
+            int j = 1;
+            foreach (var product in productList)
+            {
+                product.ProductID = j;
+                product.SKU = i.ToString();
+                product.IsStock = false;
+                i += 2;
+                j += 2;
+            }
+
+            return productList;
+        }
+
+        public async Task<List<Product>> GetAllProducts()
+        {
+
+            return new List<Product>
+             {
+            new Product { ProductID = 1, ActualProductName = "Gaming Laptop", RegularPrice = 1299.99m, AvailableQuantity = 50, SKU = "GLP001" },
+            new Product { ProductID = 2, ActualProductName = "Smartphone", RegularPrice = 699.99m, AvailableQuantity = 100, SKU = "SPH002" },
+            new Product { ProductID = 3, ActualProductName = "Bluetooth Headphones", RegularPrice = 149.99m, AvailableQuantity = 150, SKU = "BHP003" },
+            new Product { ProductID = 4, ActualProductName = "4K Smart TV", RegularPrice = 899.99m, AvailableQuantity = 30, SKU = "TV004" },
+            new Product { ProductID = 5, ActualProductName = "Fitness Tracker", RegularPrice = 79.99m, AvailableQuantity = 200, SKU = "FT005" },
+            new Product { ProductID = 6, ActualProductName = "External Hard Drive", RegularPrice = 129.99m, AvailableQuantity = 80, SKU = "EHD006" },
+            new Product { ProductID = 7, ActualProductName = "Wireless Keyboard", RegularPrice = 59.99m, AvailableQuantity = 120, SKU = "WKM007" },
+            new Product { ProductID = 8, ActualProductName = "Coffee Maker", RegularPrice = 49.99m, AvailableQuantity = 180, SKU = "CM008" },
+            new Product { ProductID = 9, ActualProductName = "Bluetooth Speaker", RegularPrice = 89.99m, AvailableQuantity = 90, SKU = "BSP009" },
+            new Product { ProductID = 10, ActualProductName = "Electric Toothbrush", RegularPrice = 39.99m, AvailableQuantity = 150, SKU = "ETB010" },
+            new Product { ProductID = 11, ActualProductName = "Air Fryer", RegularPrice = 129.99m, AvailableQuantity = 60, SKU = "AF011" },
+            new Product { ProductID = 12, ActualProductName = "Robot Vacuum", RegularPrice = 299.99m, AvailableQuantity = 40, SKU = "RVC012" },
+            new Product { ProductID = 13, ActualProductName = "Portable Power Bank", RegularPrice = 29.99m, AvailableQuantity = 250, SKU = "PPB013" },
+            new Product { ProductID = 14, ActualProductName = "Monitor Stand", RegularPrice = 49.99m, AvailableQuantity = 100, SKU = "MS014" },
+            new Product { ProductID = 15, ActualProductName = "Wireless Earbuds", RegularPrice = 129.99m, AvailableQuantity = 70, SKU = "WEB015" },
+            new Product { ProductID = 16, ActualProductName = "Backpack", RegularPrice = 79.99m, AvailableQuantity = 120, SKU = "BP016" },
+            new Product { ProductID = 17, ActualProductName = "Smart Watch", RegularPrice = 199.99m, AvailableQuantity = 80, SKU = "SW017" },
+            new Product { ProductID = 18, ActualProductName = "Desktop Computer", RegularPrice = 1499.99m, AvailableQuantity = 30, SKU = "DC018" },
+            new Product { ProductID = 19, ActualProductName = "Portable Bluetooth", RegularPrice = 199.99m, AvailableQuantity = 50, SKU = "PBP019" },
+            new Product { ProductID = 20, ActualProductName = "Electric Scooter", RegularPrice = 399.99m, AvailableQuantity = 25, SKU = "ES020" },
+            new Product { ProductID = 21, ActualProductName = "Smart Thermostat", RegularPrice = 149.99m, AvailableQuantity = 60, SKU = "ST021" },
+            new Product { ProductID = 22, ActualProductName = "UV Sterilizer", RegularPrice = 59.99m, AvailableQuantity = 100, SKU = "UVS022" },
+            new Product { ProductID = 23, ActualProductName = "Wireless Charging Pad", RegularPrice = 34.99m, AvailableQuantity = 150, SKU = "WCP023" },
+            new Product { ProductID = 24, ActualProductName = "Waterproof Bluetooth", RegularPrice = 99.99m, AvailableQuantity = 70, SKU = "WBSP024" },
+            new Product { ProductID = 25, ActualProductName = "Retro Gaming Console", RegularPrice = 179.99m, AvailableQuantity = 40, SKU = "RGC025" },
+            new Product { ProductID = 26, ActualProductName = "Streaming Media Player", RegularPrice = 79.99m, AvailableQuantity = 90, SKU = "SMP026" },
+            new Product { ProductID = 27, ActualProductName = "Digital Photo Frame", RegularPrice = 49.99m, AvailableQuantity = 120, SKU = "DPF027" },
+            new Product { ProductID = 28, ActualProductName = "Electric Kettle", RegularPrice = 29.99m, AvailableQuantity = 200, SKU = "EK028" },
+            new Product { ProductID = 29, ActualProductName = "Smart Door Lock", RegularPrice = 249.99m, AvailableQuantity = 50, SKU = "SDL029" },
+            new Product { ProductID = 30, ActualProductName = "Bluetooth Game", RegularPrice = 69.99m, AvailableQuantity = 80, SKU = "BGC030" },
+             new Product { ProductID = 31, ActualProductName = "Wireless Router", RegularPrice = 79.99m, AvailableQuantity = 100, SKU = "WR031" },
+            new Product { ProductID = 32, ActualProductName = "Home Security Camera", RegularPrice = 149.99m, AvailableQuantity = 60, SKU = "HSC032" },
+            new Product { ProductID = 33, ActualProductName = "Electric Shaver", RegularPrice = 49.99m, AvailableQuantity = 120, SKU = "ES033" },
+            new Product { ProductID = 34, ActualProductName = "Smart Scale", RegularPrice = 39.99m, AvailableQuantity = 150, SKU = "SS034" },
+            new Product { ProductID = 35, ActualProductName = "Portable Blender", RegularPrice = 29.99m, AvailableQuantity = 200, SKU = "PB035" },
+            new Product { ProductID = 36, ActualProductName = "LED Desk Lamp", RegularPrice = 24.99m, AvailableQuantity = 250, SKU = "LDL036" },
+            new Product { ProductID = 37, ActualProductName = "Cordless Drill", RegularPrice = 99.99m, AvailableQuantity = 70, SKU = "CD037" },
+            new Product { ProductID = 38, ActualProductName = "HDMI Transmitter", RegularPrice = 149.99m, AvailableQuantity = 90, SKU = "WHT038" },
+            new Product { ProductID = 39, ActualProductName = "Smart Plug", RegularPrice = 19.99m, AvailableQuantity = 120, SKU = "SP039" },
+            new Product { ProductID = 40, ActualProductName = "Barcode Scanner", RegularPrice = 89.99m, AvailableQuantity = 80, SKU = "BBS040" }
+             };
+
+        }
+
+		public async Task<List<Product>> GetAllProductsServerPaginated(InventoryProductFilterModel inventoryProductFilterModel)
+		{
+			try
 			{
-				product.ItemCode = i.ToString();
-				i += 1;
+				var response = await _apiManager.PostAsync<List<Product>>(AppConstants.baseAddress + "/materialLabor/GetAllProductsServerPaginated" , inventoryProductFilterModel);
+				return response;
 			}
-			
-			return productList;
-			
+			catch (Exception ex)
+			{
+				return null;
+			}
 		}
 	}
 }

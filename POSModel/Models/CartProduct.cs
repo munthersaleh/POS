@@ -16,5 +16,7 @@ namespace POSModel.Models
 		public bool IsSaleTax { get; set; } = true;
 		public int Quantity { get; set; }
 		public string Sku { get; set; }
+
+		public bool IsStock {  get; set; }
 	}
 }

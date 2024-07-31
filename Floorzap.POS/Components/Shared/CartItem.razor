@@ -1,0 +1,45 @@
+﻿<div class="product-card position-relative p-2 mt-3">
+    <div class="d-flex justify-content-between align-items-center p-2 text-black" style="font-weight:600">
+        <p style="flex:1;">@cartProduct.ItemCode</p>
+        <p style="flex:2;">@cartProduct.Name</p>
+        <div style="flex:1;">
+            <div style="width:80%;background-color:white;">
+                <input class="form-control" type="number"
+                       @onchange="HandleUnitPriceInput"
+                       value="@cartProduct.UnitPrice" style="font-weight:600" placeholder="0">
+            </div>
+        </div>
+        <div style="flex:1;">
+            <div style="width:60%;background-color:white;">
+                <input class="form-control" type="number"
+                       @onchange="HandleDiscountInput"
+                       style="font-weight:600" placeholder="0" value="@cartProduct.Discount">
+            </div>
+        </div>
+        <p style="flex:1;">
+            <div style="width:60%;background-color:white;">
+                <input class="form-control"
+                       @onchange="HandleQuantityInput" type="number" style="font-weight:600" placeholder="0" value="@cartProduct.Quantity">
+            </div>
+        </p>
+        <div style="flex:1;">
+            <input type="checkbox" @onchange="HandleSalesTaxInput" checked value="@cartProduct.IsSaleTax">
+        </div>
+        <p style="flex:1;">$@((cartProduct.UnitPrice * cartProduct.Quantity) - cartProduct.Discount)</p>
+    </div>
+    <div style="position:absolute; top: 50%;
+                right:7px;
+                transform: translate(-50%, -50%);">
+        <i @onclick="RemoveProduct" class="fa-solid fa-trash fs-16px"></i>
+    </div>
+    <div style="position:absolute;top:-7px;">
+        @if (cartProduct.IsStock)
+        {
+            <i class="fa-solid fa-cubes"></i>
+        }
+        else
+        {
+            <i class="fa-solid fa-qrcode"></i>
+        }
+    </div>
+</div>

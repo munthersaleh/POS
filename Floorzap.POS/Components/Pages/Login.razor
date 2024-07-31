@@ -1,11 +1,5 @@
 ﻿@page "/"
 <style>
-   /*  .login-container{
-        background-image: url('Images/pos-login-background.jpg');
-        background-size: cover;  
-        background-position: center; 
-        background-repeat: no-repeat;
-    } */
     .login-container {
        
     }
@@ -16,32 +10,60 @@
         height: 460px;
         width: 850px;
     }
+    .login-input{
+        margin-left: -25px;
+        padding-left: 30px;
+    }
+
+    .pin-inputs {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .pin-digit {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        font-size: 1.5em;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .error {
+        color: red;
+        font-size: 0.9em;
+    }
 </style>
 
-<div class="container-fluid vh-100 d-flex justify-content-center align-items-center ">
-    <div class="row login-card" style="">
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center " style="background-color:#F0F0F0">
+    <div class="row login-card" style="background-color:white">
         <div class="col-6 p-0">
-            <img class=" img-fluid" style="max-width: 100%; height: 100%; border-radius:10px 0 0 10px;object-fit:cover" src="Images/pos-login-image.jpg" />
+            <img class=" img-fluid" style="max-width: 100%; height: 100%; border-radius:10px 0 0 10px;object-fit:cover"
+            src="Images/login-pos-image.jpg" />
         </div>
-        <div class="col-6 d-flex flex-column justify-content-around">
+        <div class="col-6 d-flex flex-column justify-content-center align-items-center">
             <div >
-                <p class ="text-center" style="font-size:30px;">Floorzap</p>
+                <p class="text-center" style="font-size:40px;font-weight:500">POS</p>
             </div>
             <div class="p-4">
-                <form @onsubmit="LoginUser">
+               @*  <form @onsubmit="LoginUser">
                     <div class="form-group row mb-3">
-                        <div class=" ">
-                            <input class="form-control fs-17px" @bind="userLoginModel.SiteUrl" type="text" placeholder="Site url" required>
+                        <div class="d-flex align-items-center">
+                            <span style="margin-left:15px"><i class="fa-solid fa-globe"></i></span>
+                            <input class="form-control fs-17px login-input" @bind="userLoginModel.SiteUrl" type="text" placeholder="Site url" required>
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <div class=" ">
-                            <input class="form-control fs-17px" @bind="userLoginModel.UserName" type="text" placeholder="Email address" required>
+                        <div class="d-flex align-items-center">
+                            <span style="margin-left:15px"><i class="fa-solid fa-user"></i></span>
+                            <input class="form-control fs-17px login-input" @bind="userLoginModel.UserName" type="text" placeholder="Email address" required>
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <div class=" ">
-                            <input class="form-control fs-17px" @bind="userLoginModel.Password" type="password" placeholder="Password" required>
+                        <div class="d-flex align-items-center">
+                            <span style="margin-left:15px"><i class="fa-solid fa-lock"></i></span>
+                            <input class="form-control fs-17px login-input" @bind="userLoginModel.Password" type="password" placeholder="Password" required>
                         </div>
                     </div>
                     @if (isInvalidCredentials)
@@ -53,64 +75,28 @@
                             </div>
                         </div>
                     }
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" style="width:130px;" class="btn btn-pink fs-22px">Login</button>
+                    <div class="d-flex justify-content-center pt-3">
+                        <button type="submit" style="width:180px;padding:2px" class="btn btn-theme fs-22px ">Login</button>
 
                     </div>
+                </form> *@
+                <p>Please enter 4-digit PIN:</p>
+                <form @onsubmit="HandleSubmit">
+                    <div class="pin-inputs">
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            int j = i;
+                            <input type="password" maxlength="1" id="pinInput_@j" class="pin-digit" @bind-value="pin[j]" @oninput="(e) => OnPinInput(e, j)" />
+                        }
+                    </div>
+                    <button type="submit" style="width:175px;padding:2px" class="btn btn-theme fs-22px mt-2 ">Submit</button>
                 </form>
+                @if (loginError)
+                {
+                    <p class="error mt-2">Invalid PIN. Please try again.</p>
+                }
             </div>
          
         </div>
     </div>
 </div>
-
-@* <div class="container-fluid vh-100 d-flex justify-content-center align-items-center login-container">
-    <div class="card" style="width: 480px;box-shadow: 3px 4px 16px rgba(0, 0, 0, 0.5);background-color:white">
-        <div class="card-header fw-bold h1 text-center" style="font-size:45px;">Floorzap</div>
-        <div class="card-body" style="padding:30px">
-            <form @onsubmit="LoginUser">
-                <div class="form-group row mb-3">
-                    <label for="staticEmail" class="col-4 col-form-label fs-18px">Site Url</label>
-                    <div class="col-8">
-                        <input class="form-control fs-17px" @bind="userLoginModel.SiteUrl" type="text" placeholder="Site url" required>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <label for="staticEmail" class="col-4 col-form-label fs-18px">User Name</label>
-                    <div class="col-8">
-                        <input class="form-control fs-17px" @bind="userLoginModel.UserName" type="text" placeholder="Email address" required>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <label for="staticEmail" class="col-4 col-form-label fs-18px">Password</label>
-                    <div class="col-8">
-                        <input class="form-control fs-17px" @bind="userLoginModel.Password" type="password" placeholder="Password" required>
-                    </div>
-                </div>
-                @if (isInvalidCredentials)
-                {
-                    <div class="form-group row mb-3">
-                        <div class="col-4"></div>
-                        <div class="col-8">
-                            <p style="color:red">Invalid Credentials</p>
-                        </div>
-                    </div>
-                }
-                <div class="d-flex justify-content-center">
-                    <button type="submit" style="width:130px;" class="btn btn-theme fs-22px">Login</button>
-
-                </div>
-            </form>
-            
-        </div>
-
-        <!-- arrow -->
-        <div class="card-arrow">
-            <div class="card-arrow-top-left"></div>
-            <div class="card-arrow-top-right"></div>
-            <div class="card-arrow-bottom-left"></div>
-            <div class="card-arrow-bottom-right"></div>
-        </div>
-    </div>
-</div>
- *@
