@@ -4,7 +4,12 @@
 <div >
 	<MudTable ServerData="ServerReload" FixedHeader="true" FixedFooter="true" Height="400px" MultiSelection="true" Dense="true" Hover="true" Bordered="true" @ref="table" @bind-SelectedItems="selectedItems"  SelectOnRowClick="true">
 		<ToolBarContent>
+			@if(IsInventory){
 			<MudText Typo="Typo.h6">Inventory Products</MudText>
+			}
+			else{
+			<MudText Typo="Typo.h6">Non Inventory Products</MudText>
+			}
 			<MudSpacer />
 			<MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
 						  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>

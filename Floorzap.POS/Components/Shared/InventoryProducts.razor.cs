@@ -34,6 +34,7 @@ namespace Floorzap.POS.Components.Shared
 		private async Task AddSelectedProducts()
 		{
 			await OnAddProducts.InvokeAsync(selectedItems);
+			selectedItems = new HashSet<Product>();
 		}
 
 		private async Task<TableData<Product>> ServerReload(TableState state, CancellationToken token)

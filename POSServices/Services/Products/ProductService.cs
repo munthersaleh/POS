@@ -111,7 +111,7 @@ namespace POSServices.Services.Products
 			}
 			catch (Exception ex)
 			{
-				return null;
+				return new List<Product>();
 			}
 		}
 	}

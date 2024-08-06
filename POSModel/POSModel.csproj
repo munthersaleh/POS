@@ -14,10 +14,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.7" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
   <PropertyGroup>
     <TargetFrameworks>net8.0;net8.0-windows10.0.19041.0</TargetFrameworks>
   </PropertyGroup>

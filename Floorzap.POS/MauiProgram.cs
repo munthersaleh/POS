@@ -2,8 +2,13 @@
 using MudBlazor.Services;
 using POSServices.HttpApiManager;
 using POSServices.Services.Authentication;
+using POSServices.Services.Calculations;
+using POSServices.Services.Company;
 using POSServices.Services.Customers;
+using POSServices.Services.Invoices;
+using POSServices.Services.Locations;
 using POSServices.Services.Products;
+using POSServices.Services.SystemLists;
 
 namespace Floorzap.POS
 {
@@ -28,6 +33,11 @@ namespace Floorzap.POS
 			builder.Services.AddTransient<IProductService, ProductService>();
 			builder.Services.AddTransient<ICustomerService, CustomerService>();
 			builder.Services.AddTransient<IAccountService, AccountService>();
+			builder.Services.AddTransient<ICompanyService, CompanyService>();
+			builder.Services.AddTransient<IInvoiceService, InvoiceService>();
+			builder.Services.AddTransient<ISystemListService, SystemListService>();
+			builder.Services.AddTransient<ICalculationService, CalculationService>();
+			builder.Services.AddTransient<ILocationService, LocationService>();
 
 #if DEBUG
 			builder.Services.AddBlazorWebViewDeveloperTools();

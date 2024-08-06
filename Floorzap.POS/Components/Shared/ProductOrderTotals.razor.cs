@@ -15,17 +15,18 @@ namespace Floorzap.POS.Components.Shared
 
 
         [Parameter]
-        public decimal TaxPrice { get; set; }
-        public decimal TotalPrice { get; private set; }
+        public decimal SalesTax { get; set; }
+        [Parameter]
+        public decimal TotalPrice { get; set; }
 
-        protected override void OnParametersSet()
-        {
-            UpdateTotals();
-        }
+        //protected override void OnParametersSet()
+        //{
+        //    UpdateTotals();
+        //}
 
-        private void UpdateTotals()
-        {
-            TotalPrice = Math.Round(SubTotalPrice + TaxPrice, 2);
-        }
+        //private void UpdateTotals()
+        //{
+        //    TotalPrice = Math.Round(SubTotalPrice + TaxPrice, 2);
+        //}
     }
 }

@@ -49,26 +49,10 @@
             }
         }
 
-        function getSelectedProductIds() {
-            // get all checkboxes with the class 'product-checkbox'
-            const checkboxes = document.querySelectorAll('.product-checkbox');
-            const selectedids = [];
-
-            // iterate through the checkboxes
-            checkboxes.forEach(checkbox => {
-                // if the checkbox is checked, add its id to the array
-                if (checkbox.checked) {
-                    // convert the id to an integer
-                    const productid = parseInt(checkbox.getAttribute('data-product-id'));
-                    if (!isNaN(productid)) {
-                        selectedids.push(productid);
-                        checkbox.checked = false;
-                    }
-                }
-            });
-            return selectedids;
+        function selectInputText(element) {
+            debugger;
+            element.select();
         }
-
 
     </script>
 

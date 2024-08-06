@@ -1,0 +1,14 @@
+﻿using POSModel.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace POSServices.Services.Company
+{
+	public interface ICompanyService
+	{
+		Task<CompanySettings> GetCompanySettingsAsync();
+	}
+}
