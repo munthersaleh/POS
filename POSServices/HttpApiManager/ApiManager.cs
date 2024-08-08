@@ -1,4 +1,5 @@
-﻿using System;
+﻿using POSServices.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace POSServices.HttpApiManager
 					
 				}
 				//req.Headers.Add("Content-Type", "application/json; charset=utf-8");
-				req.Headers.Add("Cookie", "ASP.NET_SessionId=ezl4dyr3sshabfgc1djj4b4k; timezone=Central+Standard+Time; FloorzapAuthCookie=aAGkZkjLkaCUZPY2tHI9ZRyvuL3eY_hHZPrSfyUWo-6BrL7mH5bQWLGBQ64yPRCBUH7QXMWqkKSiPsr-YrQIpmXWYSheyJU1x5tctGRwn8Wmbwq2Gg9yphN7kKWJx75C73MYTJ5LN_HZYTgSmG1Eg236zBgpWphplNNmnR9EhKObWkjwhhm4qH0Rk4DAsFqMjXPJIZMyqN1tJnWGaaIJrA3X7uRk9quHFIc_ijX9ACQufLdn-jQFkpCACW_imdmegRFyFeup8VJw7rdx9VJ_gIrAQDlv4uQTy5myVwDcjR7ek7HcVEL2mJZvFV8CJZiErGA6Qzkd8HVCBxYQEftVuvrZflCyn_DxCZ93YMRo5CTgvnrvat8KDdK_PUd5SuTx-7tZwrsiQ9xkzwWWQi8qJ4_TUzt-tKmfTA-YFMw8As4KmHWLxc0Ks-w62jSxQCH8q-CylpGjZQoLPlToODZ0iB_9vQq2Cdnt6E2Y83jePhC7Q5bl8YGyY8ZwVJL-606PJb06PWpOETNXYRNlK8R5pw");
+				req.Headers.Add("Cookie", AppConstants.apiCookies);
 				var response = await _httpClient.SendAsync(req);
 				if (response.IsSuccessStatusCode)
 				{

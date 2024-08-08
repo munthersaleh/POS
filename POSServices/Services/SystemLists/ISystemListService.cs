@@ -10,5 +10,6 @@ namespace POSServices.Services.SystemLists
 	public interface ISystemListService
 	{
 		Task<IEnumerable<SystemList>> GetSystemListByListTypeID(int listTypeID);
-	}
+        Task<IEnumerable<SystemList>> GetAllSystemList();
+    }
 }

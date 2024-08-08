@@ -19,10 +19,19 @@ namespace Floorzap.POS.Components.Shared
         public EventCallback<LineItemData> OnChangeLineItemData { get; set; }
         [Parameter]
         public EventCallback<int?> OnRemoveCartProduct { get; set; }
+        [Inject]
+        private IJSRuntime JS { get; set; }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await JS.InvokeVoidAsync("selectTextOnFocus", ".select-on-focus");
+            }
+        }
         public void HandleQuantityInput(ChangeEventArgs args)
         {
-            if (int.TryParse(args.Value.ToString(), out int quantity))
+            if (decimal.TryParse(args.Value.ToString(), out decimal quantity))
             {
                 LineItemData lineItemData = new LineItemData
                 {
@@ -35,7 +44,7 @@ namespace Floorzap.POS.Components.Shared
         }
         public void HandleUnitPriceInput(ChangeEventArgs args)
         {
-            if (int.TryParse(args.Value.ToString(), out int unitPrice))
+            if (decimal.TryParse(args.Value.ToString(), out decimal unitPrice))
             {
                 LineItemData lineItemData = new LineItemData
                 {
@@ -49,7 +58,7 @@ namespace Floorzap.POS.Components.Shared
         }
         public void HandleMarginInput(ChangeEventArgs args)
         {
-            if (int.TryParse(args.Value.ToString(), out int margin))
+            if (decimal.TryParse(args.Value.ToString(), out decimal margin))
             {
                 LineItemData lineItemData = new LineItemData
                 {
@@ -66,7 +75,7 @@ namespace Floorzap.POS.Components.Shared
         }
         public void HandleDiscountInput(ChangeEventArgs args)
         {
-            if (int.TryParse(args.Value.ToString(), out int discount))
+            if (decimal.TryParse(args.Value.ToString(), out decimal discount))
             {
                 LineItemData lineItemData = new LineItemData
                 {
@@ -90,12 +99,6 @@ namespace Floorzap.POS.Components.Shared
         private void RemoveProduct()
         {
             OnRemoveCartProduct.InvokeAsync(invoiceProduct.UniqueMaterialID);
-        }
-
-        private bool ShouldDisableInput()
-        {
-            // Example condition
-            return invoiceProduct.ProductDiscountAmount > 0 || invoiceProduct.ProductDiscount > 0;
         }
 
     }

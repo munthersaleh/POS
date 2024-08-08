@@ -19,6 +19,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MudBlazor;
+using Microsoft.Maui.Devices.Sensors;
 namespace Floorzap.POS.Components.Pages
 {
 	public partial class ProductOrder
@@ -62,7 +63,8 @@ namespace Floorzap.POS.Components.Pages
         ICalculationService calculationService { get; set; }
         [Inject]
         ILocationService locationService { get; set; }
-
+        [Inject]
+        ISnackbar snackbar { get; set; }
         public int selectedLocationID { get; set; }
 
         int materialRowCount = 0;
@@ -76,14 +78,15 @@ namespace Floorzap.POS.Components.Pages
 			dataLoaded = false;
 			allCustomers = await customerService.GetAllCustomers();
             companySettings = await companyService.GetCompanySettingsAsync();
-            
-            //AppConstants.UOMList = await systemListService.GetSystemListByListTypeID(6); //
+            AppConstants.allSystemLists = await systemListService.GetAllSystemList(); //
+
             await CreateEmptyInvoice();
             allLocations = await locationService.GetAllLocations();
             if (allLocations != null && allLocations.Count > 0)
             {
                 selectedLocationID = allLocations[0].LocationID;
                 invoice.InvoiceData.TaxRate = allLocations[0].SalesTax;
+                invoice.InvoiceDetail.LocationID = selectedLocationID;
                 invoice.InvoiceData.TaxSource = 2; //location
             }
             dataLoaded = true;
@@ -92,6 +95,7 @@ namespace Floorzap.POS.Components.Pages
         private void OnSelectionChanged(int locationID)
         {
             selectedLocationID = locationID;
+            invoice.InvoiceDetail.LocationID = locationID;
             invoice.InvoiceData.TaxRate = allLocations.FirstOrDefault(l => l.LocationID == selectedLocationID).SalesTax;
         }
 
@@ -110,15 +114,16 @@ namespace Floorzap.POS.Components.Pages
             }
             isShownCustomerList = true;
         }
+        private bool customerChanged = true;
         private async Task ChangeCustomer(CustomerInfo customer)
         {
-            //dataLoaded = false;
+			customerChanged = false;
             selectedCustomer = customer;
             searchCustomer = customer.FullName;
             isShownCustomerList = false;
             customerAddress = await customerService.GetDefaultAddressByCustomerID(customer.CustomerID);
 			await UpdateInvoiceCustomer();
-           // dataLoaded = true;
+            customerChanged = true;
            
         }
 
@@ -271,8 +276,6 @@ namespace Floorzap.POS.Components.Pages
             StateHasChanged();
         }
 
-     
-
 
         public int findMaterialIndex(int? uniqueMaterialId)
         {
@@ -399,7 +402,19 @@ namespace Floorzap.POS.Components.Pages
 		private async Task SaveInvoice()
 		{
             isSavingInvoice = true;
-			CreateInvoiceRequest savedInvoice = await invoiceService.CreateInvoice(invoice);
+            if(selectedCustomer == null )
+            {
+                snackbar.Add("Please select customer", Severity.Error);
+            }
+            else if (invoice.InvoiceData.ServiceTypes[0].Materials == null || invoice.InvoiceData.ServiceTypes[0].Materials.Count == 0)
+            {
+                snackbar.Add("Please add products", Severity.Error);
+            }
+            else
+            {
+                CreateInvoiceRequest savedInvoice = await invoiceService.CreateInvoice(invoice);
+
+            }
             isSavingInvoice = false;
 		}
 

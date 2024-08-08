@@ -130,15 +130,9 @@
                             <p style="font-size:28px;font-weight:600">Order details</p>
 
                             <div class="d-flex fs-20px">
-                                <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#inventoryProductsModal" class="py-1 pe-2 ps-3" style="background-color:#f5a135;border-radius:15px 0 0 15px;padding-right:4px;border:none"> <i class="fa-solid fa-cubes"></i></button>
-                                @* <div class="py-1 pe-2 ps-3" style="background-color:#f5a135;border-radius:15px 0 0 15px;padding-right:4px;">
-                            <i class="fa-solid fa-cubes"></i>
-                            </div> *@
-                                <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#nonInventoryProductsModal" class="py-1 ps-2 pe-3" style="background-color:#4bdba0;border-radius:0px 15px 15px 0px;padding-left:4px;border:none"> <i class="fa-solid fa-qrcode"></i></button>
-                                @* <div class="py-1 ps-2 pe-3" style="background-color:#4bdba0;border-radius:0px 15px 15px 0px;padding-left:4px;">
-                            <i class="fa-solid fa-qrcode"></i>
-                            </div> *@
-
+                                <button type="button" tabindex="-1" data-bs-toggle="modal" data-bs-target="#inventoryProductsModal" class="discount-btn"  style="height:45px;width:180px;font-size:20px;background-color:#f5a135;">
+                                   Add Products
+                                </button>
                             </div>
 
                         </div>
@@ -148,8 +142,7 @@
                             <div class="d-flex justify-content-between p-3 pb-0" style="font-weight:400">
                                 <p style="flex:1;">item#</p>
                                 <p style="flex:2;">Name</p>
-                                <p style="flex:1;">Unit Price</p>
-                                @* <p style="flex:1;">Margin</p> *@
+                                <p style="flex:1;">Unit Cost</p>
                                 <p style="flex:1;">Discount</p>
                                 <p style="flex:1;">Quantity</p>
                                 <p style="flex:.5;">Tax</p>
@@ -311,7 +304,7 @@
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <button type="button" class="btn btn-theme discount-btn" @onclick="() => SaveInvoice()" style="height:65px;font-size:20px">
+                                <button type="button" class="discount-btn" @onclick="() => SaveInvoice()" style="height:65px;font-size:20px">
                                     @if(!isSavingInvoice){
                                         <span>Confirm payment</span>
                                      }
@@ -331,40 +324,20 @@
             </div>
         </div>
 
-        @* Inventory Products Modal*@
+        @*Products Modal*@
         <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="inventoryProductsModal">
             <div class="modal-dialog  modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Select Inventory Products</h5>
+                        <h5 class="modal-title">Select Products</h5>
                     </div>
                     <div class="modal-body">
-
-                        <InventoryProducts OnAddProducts="AddCartsItems" IsInventory=true />
+                        <InventoryProducts OnAddProducts="AddCartsItems"  />
                     </div>
-                    @*  <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div> *@
                 </div>
             </div>
         </div>
-        @*Non Inventory Products Modal*@
-        <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="nonInventoryProductsModal">
-            <div class="modal-dialog  modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Select Non Inventory Products</h5>
-                    </div>
-                    <div class="modal-body">
-
-                        <InventoryProducts OnAddProducts="AddCartsItems" IsInventory=false />
-                    </div>
-                    @*  <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div> *@
-                </div>
-            </div>
-        </div>
+       
 
         @* Start Customer Modal*@
         <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="customerModal">
@@ -393,7 +366,14 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        @if (customerChanged)
+                        {
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        }
+                        else
+                        {
+                            <MudProgressCircular Style="color: #00df81;" Indeterminate="true" />
+                        }
                     </div>
                 </div>
             </div>
@@ -406,7 +386,7 @@
 else
 {
     <div class="d-flex justify-content-center align-items-center vh-100">
-        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+        <MudProgressCircular Style="color: #00df81;" Indeterminate="true" />
 
    </div>
    

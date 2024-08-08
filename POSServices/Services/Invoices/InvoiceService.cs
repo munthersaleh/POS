@@ -56,9 +56,9 @@ namespace POSServices.Services.Invoices
 				MarginCalculateType = companySettings.CalculateMarginPercentBasedOn,
 				SalesTaxAsCost = companySettings.SalesTaxAsCost,
 				TaxCalculationAfterDiscount = companySettings.TaxCalculationAfterDiscount,
-				MaterialOverheadPercentage = companySettings.MaterialOverheadPercentage,
+				MaterialOverheadPercentage = companySettings.MaterialOverheadPercentage ?? 0,
 				ApplyMaterialOverheadToSellPrice = companySettings.ApplyMaterialOverheadToSellPrice ?? false,
-				LaborOverheadPercentage = companySettings.LaborOverheadPercentage,
+				LaborOverheadPercentage = companySettings.LaborOverheadPercentage ?? 0,
 				ApplyLaborOverheadToSellPrice = companySettings.ApplyLaborOverheadToSellPrice ?? false,
 				SubTotalOverheadPercentage = companySettings.SubTotalOverheadPercentage ?? 0,
 				QuoteInvoiceOriginalCreatedDate = DateTime.Now,
@@ -121,9 +121,9 @@ namespace POSServices.Services.Invoices
 				SalesTaxAsCost = companySettings.SalesTaxAsCost,
 				TaxCalculationAfterDiscount = companySettings.TaxCalculationAfterDiscount,
 				CalcMarginBeforeTax = true,
-				MaterialOverheadPercentage = companySettings.MaterialOverheadPercentage,
+				MaterialOverheadPercentage = companySettings.MaterialOverheadPercentage ?? 0,
 				ApplyMaterialOverheadToSellPrice = companySettings.ApplyMaterialOverheadToSellPrice ?? false,
-				LaborOverheadPercentage = companySettings.LaborOverheadPercentage,
+				LaborOverheadPercentage = companySettings.LaborOverheadPercentage ?? 0,
 				ApplyLaborOverheadToSellPrice = companySettings.ApplyLaborOverheadToSellPrice ?? false,
 				SubTotalOverheadPercentage = companySettings.SubTotalOverheadPercentage ?? 0,
 				//QuoteInvoiceOriginalCreatedDate = DateTime.Now,
@@ -150,8 +150,9 @@ namespace POSServices.Services.Invoices
 		}
 		private async Task<ServiceTypeItem> CreateServiceType()
 		{
-			int jobTypeId = 2242; // system list id for cash and carry
-			string jobTypeName = "Cash and Carry";
+			SystemList cashAndCarry = AppConstants.allSystemLists.FirstOrDefault(s => s.Title.ToLower() == "Cash and Carry".ToLower()); // system list id for cash and carry // 2242
+			int jobTypeId = cashAndCarry.SystemListID;
+			string jobTypeName = cashAndCarry.Title;
 			// get service type tax setting from the database
 
 			ServiceTypeItem serviceTypeItem = new ServiceTypeItem()

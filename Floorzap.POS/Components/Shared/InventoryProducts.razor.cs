@@ -18,8 +18,6 @@ namespace Floorzap.POS.Components.Shared
 		[Parameter]
 		public EventCallback<HashSet<Product>> OnAddProducts { get; set; }
 
-		[Parameter]
-		public bool IsInventory { get; set; }
 		[Inject]
         IProductService productService { get; set; }
 
@@ -30,6 +28,8 @@ namespace Floorzap.POS.Components.Shared
 
 		private int totalItems;
 		private string searchString = null;
+
+		private int stockType = 1;
 
 		private async Task AddSelectedProducts()
 		{
@@ -53,7 +53,7 @@ namespace Floorzap.POS.Components.Shared
 				},
 				ServiceTypeID = 1231
 			};
-			filterModel.IsStock = IsInventory ? 1 : 0;
+			filterModel.IsStock = stockType;
 
 			List<Product> filteredProducts = await productService.GetAllProductsServerPaginated(filterModel);
 			totalItems = filteredProducts.Any() ? filteredProducts.FirstOrDefault().TotalCount : 0;
@@ -65,12 +65,17 @@ namespace Floorzap.POS.Components.Shared
 			};
 		}
 
-		private void OnSearch(string text)
+        private void OnSearch(string text)
 		{
 			searchString = text;
 			table.ReloadServerData();
 		}
-		
+
+		private void FilterTableByStock(int stockType)
+		{
+			this.stockType = stockType;
+			table.ReloadServerData();
+		}
 
 	}
 }

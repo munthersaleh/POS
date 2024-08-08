@@ -29,7 +29,7 @@ namespace POSModel.Models
 		public bool SendContractorReminders { get; set; }
 		public string EmailDisplayName { get; set; }
 		public bool AutomaticEmailToNewUsers { get; set; }
-		public int DefaultJobCompletionChecklistID { get; set; }
+		public int? DefaultJobCompletionChecklistID { get; set; }
 		public bool SalesmanTextMessageEnabled { get; set; }
 		public bool ShowPaymentMethodInPaymentNotification { get; set; }
 		public bool ShowPaymentMethodInViewInvoice { get; set; }
@@ -85,9 +85,9 @@ namespace POSModel.Models
 		public bool ShowVendorName { get; set; }
 		public decimal? SubTotalOverheadPercentage { get; set; }
 		public bool? ApplyOverheadToSubTotal { get; set; }
-		public decimal MaterialOverheadPercentage { get; set; }
+		public decimal? MaterialOverheadPercentage { get; set; }
 		public bool? ApplyMaterialOverheadToSellPrice { get; set; }
-		public decimal LaborOverheadPercentage { get; set; }
+		public decimal? LaborOverheadPercentage { get; set; }
 		public bool? ApplyLaborOverheadToSellPrice { get; set; }
 		public string GSTNo { get; set; }
 		public string ProductIncomeAccount { get; set; }
@@ -112,9 +112,9 @@ namespace POSModel.Models
 		public string LaborServiceExpenseAccount { get; set; }
 		public string VendorBillPaymentRebateAccount { get; set; }
 		public string LaborServiceIncomeAccount { get; set; }
-		public string VendorBillExpenseAccount { get; set; }
+		//public string VendorBillExpenseAccount { get; set; }
 		public string ReferralExpenseAccount { get; set; }
-		public string VendorCreditAccount { get; set; }
+		//public string VendorCreditAccount { get; set; }
 		public string SalesmanPaymentExpenseAccount { get; set; }
 		public string TaxesAndLicensesAccount { get; set; }
 		public string VendorPSTExpenseAccount { get; set; }

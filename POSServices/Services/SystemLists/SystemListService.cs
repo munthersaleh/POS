@@ -29,5 +29,18 @@ namespace POSServices.Services.SystemLists
 				return new List<SystemList>(); ;
 			}
 		}
-	}
+
+        public async Task<IEnumerable<SystemList>> GetAllSystemList()
+        {
+            try
+            {
+				var response = await _apiManager.GetAsync<IEnumerable<SystemList>>(AppConstants.baseAddress + "/SystemList/GetCompleteList");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new List<SystemList>(); ;
+            }
+        }
+    }
 }

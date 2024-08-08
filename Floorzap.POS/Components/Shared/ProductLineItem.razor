@@ -4,7 +4,7 @@
         <p style="flex:2;">@invoiceProduct.ProductName</p>
         <div style="flex:1;">
             <div style="width:80%;background-color:white;">
-                <input class="form-control" type="number"
+                <input class="form-control select-on-focus" type="number"
                        @onchange="HandleUnitPriceInput"
                        value="@invoiceProduct.LIPricingDetails.UnitPrice.ToString("0.##")" disabled="@((invoiceProduct.ProductDiscountAmount > 0) || (invoiceProduct.ProductDiscount > 0))" style="font-weight:600" placeholder="0">
             </div>
@@ -15,14 +15,14 @@
                 
                 @if (invoiceProduct.ProductDiscountType == (int)DiscountTypeEnum.Dollar)
                 {
-                    <input id="discountInput" class="form-control" type="number"
+                    <input id="discountInput" class="form-control select-on-focus" type="number"
                            @onchange="HandleDiscountInput"
                            style="font-weight:600;" placeholder="0" value="@(invoiceProduct.ProductDiscountAmount)">
                     <span @onclick="() => ChangeProductDiscountType()" style="cursor:default; user-select: none;position:absolute; top:50%; right:10px; transform:translateY(-50%); font-weight:600;">$</span>
                 }
                 else
                 {
-                    <input id="discountInput" class="form-control" type="number"
+                    <input id="discountInput" class="form-control select-on-focus" type="number"
                            @onchange="HandleDiscountInput"
                            style="font-weight:600;" placeholder="0" value="@((int)invoiceProduct.ProductDiscount)">
                     <span @onclick="() => ChangeProductDiscountType()" style="cursor:default; user-select: none;position:absolute; top:50%; right:10px; transform:translateY(-50%); font-weight:600;">%</span>
@@ -32,8 +32,8 @@
         </div>
         <p style="flex:1;">
             <div style="width:60%;background-color:white;">
-                <input class="form-control"
-                       @onchange="HandleQuantityInput" type="number" style="font-weight:600" placeholder="0" value="@((int)invoiceProduct.LIPricingDetails.TotalSQF)" disabled="@((invoiceProduct.ProductDiscountAmount > 0) || (invoiceProduct.ProductDiscount > 0))">
+                <input class="form-control select-on-focus"
+                       @onchange="HandleQuantityInput " type="number" style="font-weight:600" placeholder="0" value="@((int)invoiceProduct.LIPricingDetails.TotalSQF)" disabled="@((invoiceProduct.ProductDiscountAmount > 0) || (invoiceProduct.ProductDiscount > 0))">
             </div>
         </p>
         <div style="flex:.5;">
